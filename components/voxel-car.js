@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { loadGLTFModel } from "../libs/model"
@@ -29,7 +29,7 @@ const VoxelCar = () => {
 
       renderer.setSize(scW, scH)
     }
-  }, [renderer])
+  })
   /* eslint-disable react-hooks/exhaustive-deps*/
     useEffect(() => {
         const { current:container} = refContainer;
@@ -50,7 +50,7 @@ const VoxelCar = () => {
 
             //640 -> 240
             // 8 -> 6
-            const scale = scH * 0.005 + 4.8
+            const scale = scH + 4.8
             const camera = new THREE.OrthographicCamera(
                 -scale,
                 scale,
@@ -72,7 +72,7 @@ const VoxelCar = () => {
             controls.target = target
             setControls(controls)
 
-            loadGLTFModel(scene, "/dog.glb", {
+            loadGLTFModel(scene, "/old_computer.glb", {
                 receiveShadow: false,
                 castShadow: false
             }).then(() => {
@@ -102,7 +102,8 @@ const VoxelCar = () => {
 
             return () => {
                 cancelAnimationFrame(req);
-                renderer.dispose()
+                renderer.dispose();
+                container.removeChild(renderer.domElement);
             }
         }
     }, [])
@@ -119,4 +120,4 @@ const VoxelCar = () => {
     )
 }
 
-export default VoxelCar
+export default React.memo(VoxelCar);
